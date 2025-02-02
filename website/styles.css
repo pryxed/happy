@@ -1,0 +1,123 @@
+/* Body and Container */
+body {
+    background-color: #ffb6c1; /* Light pink background */
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.container {
+    text-align: center;
+    background-color: #fff; /* White container background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1; /* Ensure it's above the hearts */
+    max-width: 90%;
+    width: 400px;
+}
+
+/* Header Styling */
+h1 {
+    color: #ff66b2; /* Pink color for the header */
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+/* Input Styling */
+input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid #ff66b2;
+    width: 80%;
+    max-width: 250px;
+    text-align: center;
+    outline: none;
+}
+
+/* Button Styling */
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #ff66b2; /* Pink color for buttons */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #ff3385; /* Darker pink when hovered */
+}
+
+/* Buttons container */
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Yes Button */
+#yes {
+    background-color: #32CD32;
+}
+
+#yes:hover {
+    background-color: #228B22;
+}
+
+/* No Button */
+#no {
+    background-color: #FF6347;
+    position: relative;
+}
+
+#no:hover {
+    background-color: #d33;
+}
+
+/* Heart Animation */
+#hearts {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0; /* Ensure hearts are behind the main content */
+}
+
+.heart {
+    position: absolute;
+    font-size: 30px;
+    animation: fall 5s linear infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10vh);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+/* Message */
+#message {
+    font-size: 22px;
+    color: #ff66b2;
+    margin-top: 20px;
+    display: none;
+}

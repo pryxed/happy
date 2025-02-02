@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yes - Be My Valentine</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Confetti Canvas Styling */
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;  /* Send it behind everything */
+            user-select: none;
+            background: transparent;
+        }
+
+        /* Fade and scale-in animation */
+        .fade-in-scale {
+            animation: fadeInScale 3s ease-in-out;
+        }
+
+        /* Keyframes for fade-in and scale effect */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Center the GIF on the screen */
+        #gifContainer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            text-align: center;
+        }
+
+        #gifContainer img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        /* Mute button styling */
+        #muteButton {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: white;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #muteButton:hover {
+            color: #ff69b4;
+        }
+
+        /* Go Back Button styling */
+        #goBackButton {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 20px;
+            color: white;
+            background: #ff69b4;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #goBackButton:hover {
+            background: #ff1493;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="confetti" id="canvas"></canvas>
+    <div class="container">
+        <h1>Yay! I’m so happy! 💖</h1>
+        <p>Thank you for being my Valentine! 💖</p>
+    </div>
+
+    <div id="gifContainer">
+        <img src="https://www.icegif.com/wp-content/uploads/2023/06/icegif-948.gif" alt="Valentine GIF" />
+    </div>
+
+    <!-- Mute Button -->
+    <button id="muteButton" onclick="toggleMute()">
+        <i id="muteIcon" class="fas fa-volume-up"></i>
+    </button>
+
+    <!-- Go Back Button -->
+    <button id="goBackButton" onclick="window.history.back()">Go Back</button>
+
+    <script>
+        // JavaScript to create the audio element and play the MP3 from the local path
+        const audio = new Audio("audio/hatachi no koi x yippee.mp3");  // Correct path
+        audio.autoplay = true;
+        audio.loop = true;
+
+        // Start the audio when the page loads
+        audio.play().catch((error) => {
+            console.error("Error playing the audio:", error);
+        });
+
+        // Function to fade in and scale the GIF
+        window.onload = function() {
+            const gifContainer = document.getElementById("gifContainer");
+            gifContainer.style.display = "block";  
+            gifContainer.classList.add("fade-in-scale");
+
+            // Initialize confetti and start rendering
+            initConfetti();
+            render();
+        }
+
+        // Toggle mute/unmute functionality
+        let isMuted = false;
+        function toggleMute() {
+            if (isMuted) {
+                audio.muted = false;
+                document.getElementById("muteIcon").classList.remove("fa-volume-mute");
+                document.getElementById("muteIcon").classList.add("fa-volume-up");
+            } else {
+                audio.muted = true;
+                document.getElementById("muteIcon").classList.remove("fa-volume-up");
+                document.getElementById("muteIcon").classList.add("fa-volume-mute");
+            }
+            isMuted = !isMuted;
+        }
+
+        // Confetti Explosion Code
+        // --------- Variables ---------
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let cx = ctx.canvas.width / 2;
+        let cy = ctx.canvas.height / 2;
+
+        let confetti = [];
+        const confettiCount = 300;
+        const gravity = 0.5;
+        const terminalVelocity = 5;
+        const drag = 0.075;
+        const colors = [
+            { front: 'red', back: 'darkred' },
+            { front: 'green', back: 'darkgreen' },
+            { front: 'blue', back: 'darkblue' },
+            { front: 'yellow', back: 'darkyellow' },
+            { front: 'orange', back: 'darkorange' },
+            { front: 'pink', back: 'darkpink' },
+            { front: 'purple', back: 'darkpurple' },
+            { front: 'turquoise', back: 'darkturquoise' }
+        ];
+
+        // Resize canvas
+        resizeCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cx = ctx.canvas.width / 2;
+            cy = ctx.canvas.height / 2;
+        };
+
+        // Random range generator
+        randomRange = (min, max) => Math.random() * (max - min) + min;
+
+        // Initialize confetti
+        initConfetti = () => {
+            for (let i = 0; i < confettiCount; i++) {
+                confetti.push({
+                    color: colors[Math.floor(randomRange(0, colors.length))],
+                    dimensions: {
+                        x: randomRange(10, 20),
+                        y: randomRange(10, 30)
+                    },
+                    position: {
+                        x: randomRange(0, canvas.width),
+                        y: canvas.height - 1
+                    },
+                    rotation: randomRange(0, 2 * Math.PI),
+                    scale: {
+                        x: 1,
+                        y: 1
+                    },
+                    velocity: {
+                        x: randomRange(-25, 25),
+                        y: randomRange(0, -50)
+                    }
+                });
+            }
+        };
+
+        // Render confetti
+        render = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            confetti.forEach((confetto, index) => {
+                let width = confetto.dimensions.x * confetto.scale.x;
+                let height = confetto.dimensions.y * confetto.scale.y;
+
+                ctx.translate(confetto.position.x, confetto.position.y);
+                ctx.rotate(confetto.rotation);
+
+                confetto.velocity.x -= confetto.velocity.x * drag;
+                confetto.velocity.y = Math.min(confetto.velocity.y + gravity, terminalVelocity);
+                confetto.velocity.x += Math.random() > 0.5 ? Math.random() : -Math.random();
+
+                confetto.position.x += confetto.velocity.x;
+                confetto.position.y += confetto.velocity.y;
+
+                if (confetto.position.y >= canvas.height) confetti.splice(index, 1);
+
+                if (confetto.position.x > canvas.width) confetto.position.x = 0;
+                if (confetto.position.x < 0) confetto.position.x = canvas.width;
+
+                confetto.scale.y = Math.cos(confetto.position.y * 0.1);
+                ctx.fillStyle = confetto.scale.y > 0 ? confetto.color.front : confetto.color.back;
+
+                ctx.fillRect(-width / 2, -height / 2, width, height);
+
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+            });
+
+            if (confetti.length <= 10) initConfetti();
+
+            window.requestAnimationFrame(render);
+        };
+
+        window.addEventListener('resize', function () {
+            resizeCanvas();
+        });
+    </script>
+</body>
+</html>

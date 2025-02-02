@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No 💔</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Styling for the page */
+        #goBackButton {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 20px;
+            color: white;
+            background: #ff69b4;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #goBackButton:hover {
+            background: #ff1493;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            background-color: white; /* White box for the content */
+            padding: 20px;
+            margin-top: 50px; /* Space for the container */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Image Styling */
+        img {
+            max-width: 50%;
+            height: auto;
+            opacity: 0;
+            transform: scale(0.8);  /* Start with zoomed-out image */
+            animation: fadeInZoom 3s forwards; /* Apply fade and zoom effect */
+            z-index: 2;  /* Make sure the image stays in front of other content */
+        }
+
+        /* Keyframes for fade-in and zoom-in animation */
+        @keyframes fadeInZoom {
+            from {
+                opacity: 0;
+                transform: scale(0.8); /* Zoom out at the start */
+            }
+            to {
+                opacity: 1;
+                transform: scale(1); /* End with normal size */
+            }
+        }
+
+        #muteButton {
+            position: absolute;
+            top: 10px;
+            right: 10px; /* Positioned to the top-right */
+            font-size: 24px;
+            color: white;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #muteButton:hover {
+            color: #ff69b4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>No? 💔</h1>
+        <p>Oh well, maybe next time. 😢</p>
+        <img src="https://i.pinimg.com/originals/fc/cb/6a/fccb6a76134b8472b39df74dcf1b457b.png" alt="No Image" />
+    </div>
+
+    <button id="goBackButton" onclick="window.history.back()">Go Back</button>
+
+    <!-- Mute Button with Icon -->
+    <button id="muteButton" onclick="toggleMute()">
+        <i id="muteIcon" class="fas fa-volume-up"></i> <!-- Initial icon for unmuted state -->
+    </button>
+
+    <script>
+        // Create the audio element and set up audio to loop
+        const audio = new Audio("audio/Anakin Skywalker.mp3");  // Correct path to the MP3 file
+        audio.loop = true;
+
+        // Play audio automatically on page load
+        window.onload = function() {
+            audio.play().catch((error) => {
+                console.error("Error playing the audio:", error);
+            });
+        };
+
+        // Toggle mute/unmute functionality
+        let isMuted = false;
+        function toggleMute() {
+            if (isMuted) {
+                audio.muted = false;
+                document.getElementById("muteIcon").classList.remove("fa-volume-mute");
+                document.getElementById("muteIcon").classList.add("fa-volume-up");
+            } else {
+                audio.muted = true;
+                document.getElementById("muteIcon").classList.remove("fa-volume-up");
+                document.getElementById("muteIcon").classList.add("fa-volume-mute");
+            }
+            isMuted = !isMuted;
+        }
+    </script>
+</body>
+</html>
